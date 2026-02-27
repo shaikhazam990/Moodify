@@ -19,6 +19,6 @@ const userSchema = new mongoose.Schema({
     // userSchema.post("save", function (next) { })
 })
 
-const userModel = await mongoose.model('user', userSchema)
+const userModel = mongoose.model('user', userSchema)
 
 module.exports=userModel
