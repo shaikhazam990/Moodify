@@ -1,7 +1,6 @@
 const userModel = require("../model/user.model")
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcryptjs")
-const { json } = require("express")
 
 async function registerController(req,res) {
     const{email,username,password} = req.body
@@ -48,6 +47,54 @@ async function registerController(req,res) {
     
 }
 
+async function loginController(req,res) {
+    const {username,email,password} = req.body
+
+    const user = await userModel.findOne({
+        $or:[
+            {email},
+            {username}
+        ]
+    })
+
+    if(!user){
+        return res.status(400).json({
+            message:"Invalid Credentials"
+        })
+    }
+
+    const passwordValid = await bcrypt.compare(password,user.password)
+
+    if(!passwordValid){
+        return res.status(400).json({
+            message:"Invalid Credentials"
+        })
+    }
+
+    const token = jwt.sign(
+        {
+            id:user._id,
+            username:user.username
+        },
+        process.env.JWT_SECRET,
+        {expiresIn:"4d"}
+    )
+    res.cookie("token", token)
+
+    return res.status(201).json({
+        message:"user LoggedIn successfully",
+        user:{
+            username:user.username,
+            email:user.email,
+            id:user._id
+        }
+    })
+
+
+    
+}
+
 module.exports={
-    registerController
+    registerController,
+    loginController
 }
