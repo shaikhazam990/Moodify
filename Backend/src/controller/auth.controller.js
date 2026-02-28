@@ -94,7 +94,26 @@ async function loginController(req,res) {
     
 }
 
+async function getMeController(req,res){
+    const user = await userModel.findById(req.user.id)
+
+    if(!user){
+        return res.status(401).json({
+            message:"user not found"
+        })
+    }
+
+    return res.status(200).json({
+        message:"user fetched successfully"
+    })
+
+    
+    
+}
+
 module.exports={
     registerController,
-    loginController
+    loginController,
+    getMeController
+    
 }

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { detect, init } from "../utlis/utlis";
+import { detect, init } from "../utils/utlis";
 
 export default function FaceExpression() {
     const videoRef = useRef(null);
