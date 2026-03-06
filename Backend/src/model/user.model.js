@@ -8,18 +8,19 @@ const userSchema = new mongoose.Schema({
     },
     email:{
         type:String,
-        required:[true,"email is required"],
-        unique:[true,"email must be unique"]
+        required:[true, "email is required"],
+        unique:[true, "email must be unique"]
     },
     password:{
         type:String,
-        required:[true,"password is required"],
+        required:[true, "password is required"],
         select:false
     }
+
     // userSchema.pre("save", function (next) { })
     // userSchema.post("save", function (next) { })
 })
 
-const userModel = mongoose.model('user', userSchema)
+const userModel = mongoose.model("user", userSchema)
 
 module.exports=userModel
