@@ -1,25 +1,30 @@
-import { register, login, getMe, logout } from "../services/auth.api";
-
+import { register, login, getMe, logout, guestLogin } from "../services/auth.api";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "../auth.context";
 
-
-export const useAuth = ()=>{
+export const useAuth = () => {
     const context = useContext(AuthContext)
-    const {user, setUser, loading, setLoading} = context
+    const { user, setUser, loading, setLoading } = context
 
-    async function handleRegister({email, username, password}) {
+    async function handleRegister({ email, username, password }) {
         setLoading(true)
-        const data = await register({email, username, password})
+        const data = await register({ email, username, password })
         setUser(data.user)
         setLoading(false)
     }
 
-    async function handleLogin({email, username,password}) {
+    async function handleLogin({ email, username, password }) {
         setLoading(true)
-        const date = await login({email, username, password})
-        setUser(date.user)
-        setLoading(false)  
+        const data = await login({ email, username, password })
+        setUser(data.user)
+        setLoading(false)
+    }
+
+    async function handleGuestLogin() {
+        setLoading(true)
+        const data = await guestLogin()
+        setUser(data.user)
+        setLoading(false)
     }
 
     async function handleGetMe() {
@@ -28,9 +33,10 @@ export const useAuth = ()=>{
         setUser(data.user)
         setLoading(false)
     }
+
     async function handleLogout() {
         setLoading(true)
-        const data = await logout()
+        await logout()
         setUser(null)
         setLoading(false)
     }
@@ -39,8 +45,12 @@ export const useAuth = ()=>{
         handleGetMe()
     }, [])
 
-    return (
-        {user, loading, handleRegister, handleLogin, handleGetMe, handleLogout}
-    )
-
+    return {
+        user, loading,
+        handleRegister,
+        handleLogin,
+        handleGuestLogin,
+        handleGetMe,
+        handleLogout
+    }
 }
